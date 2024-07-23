@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class CreateBox : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject Panel;
+    public GameObject Cube;
 
-    // Update is called once per frame
-    void Update()
+    public void OpenPanel()
     {
-        
+        if (Panel != null && Cube != null)
+        {
+            bool isPanelActive = Panel.activeSelf;
+            bool isCubeActive = Cube.activeSelf;
+            Panel.SetActive(!isPanelActive);
+            Cube.SetActive(!isCubeActive);
+        }
     }
 }
