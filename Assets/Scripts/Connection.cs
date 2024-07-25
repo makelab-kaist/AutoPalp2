@@ -58,10 +58,10 @@ public class Connection : MonoBehaviour
         if (websocket.State == WebSocketState.Open)
         {
             // Sending bytes
-            await websocket.Send(new byte[] { 10, 20, 30 });
+            await websocket.Send(new byte[] { 1, 2, 3 });
 
             // Sending plain text
-            await websocket.SendText("plain text message");
+            await websocket.SendText("Hello from Meta Quest 3");
         }
     }
 
