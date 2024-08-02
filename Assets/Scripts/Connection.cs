@@ -13,6 +13,8 @@ public class Connection : MonoBehaviour
     // Define an event for message received
     public event Action<string> OnMessageReceived;
 
+    private bool isFirstArduinoAccess = true;
+
     // Start is called before the first frame update
     async void Start()
     {
@@ -42,7 +44,11 @@ public class Connection : MonoBehaviour
             Debug.Log("Received from Arduino: " + message);
 
             // Update the 3D text
-            UpdateText(message);
+            if (isFirstArduinoAccess)
+            {
+                UpdateText(message);
+                isFirstArduinoAccess = false;
+            }
 
             // Trigger the event
             OnMessageReceived?.Invoke(message);
@@ -67,7 +73,7 @@ public class Connection : MonoBehaviour
         if (websocket.State == WebSocketState.Open)
         {
             // For Arduino
-            await websocket.SendText("A");
+            await websocket.SendText("8003126511234");
         }
     }
 
@@ -80,7 +86,7 @@ public class Connection : MonoBehaviour
     {
         if (textMeshPro != null)
         {
-            textMeshPro.text = "Arduino: " + message;
+            textMeshPro.text = message;
         }
     }
 
