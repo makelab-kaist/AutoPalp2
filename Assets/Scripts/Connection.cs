@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro; // Add this to use TextMeshPro
-
 using NativeWebSocket;
 
 public class Connection : MonoBehaviour
 {
     WebSocket websocket;
     public TextMeshPro textMeshPro; // Reference to the TextMeshPro component
+
+    // Define an event for message received
+    public event Action<string> OnMessageReceived;
 
     // Start is called before the first frame update
     async void Start()
@@ -41,10 +43,13 @@ public class Connection : MonoBehaviour
 
             // Update the 3D text
             UpdateText(message);
+
+            // Trigger the event
+            OnMessageReceived?.Invoke(message);
         };
 
         // Keep sending messages at every 0.3s
-        InvokeRepeating("SendWebSocketMessage", 0.0f, 0.3f);
+        Invoke("SendWebSocketMessage", 0.3f);
 
         // waiting for messages
         await websocket.Connect();
@@ -61,12 +66,6 @@ public class Connection : MonoBehaviour
     {
         if (websocket.State == WebSocketState.Open)
         {
-            // Sending bytes
-            await websocket.Send(new byte[] { 1, 2, 3 });
-
-            // Sending plain text
-            await websocket.SendText("Hello from Meta Quest 3");
-
             // For Arduino
             await websocket.SendText("A");
         }
@@ -82,6 +81,15 @@ public class Connection : MonoBehaviour
         if (textMeshPro != null)
         {
             textMeshPro.text = "Arduino: " + message;
+        }
+    }
+
+    // Method to send messages
+    public void SendText(string message)
+    {
+        if (websocket.State == WebSocketState.Open)
+        {
+            websocket.SendText(message);
         }
     }
 }
