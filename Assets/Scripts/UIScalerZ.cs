@@ -11,7 +11,7 @@ public class UIScalerZ : MonoBehaviour
 
     // Minimum and maximum scale values
     public float minScale = 0.5f;
-    public float maxScale = 2.0f;
+    public float maxScale = 3.0f;
 
     void Start()
     {
