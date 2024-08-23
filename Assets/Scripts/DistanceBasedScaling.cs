@@ -2,57 +2,56 @@ using UnityEngine;
 
 public class DistanceBasedScaling : MonoBehaviour
 {
-    public GameObject objectA;  // Y축 크기를 조절하는 오브젝트
-    public GameObject objectB;  // 크기가 변하는 오브젝트
-    public GameObject objectC;  // X축 크기를 조절하는 새로운 오브젝트
+    public GameObject sizeAdjustTop;
+    public GameObject sizeAdjustLeft;
+    public GameObject abdomen;
 
-    public float scaleFactorY = 1.0f;  // Y축 거리 비례 계수
-    public float scaleFactorX = 1.0f;  // X축 거리 비례 계수
-    public Vector3 initialScale;  // 초기 크기
-    public float minScaleMultiplier = 0.5f;  // 최소 크기 배수
-    public float maxScaleMultiplier = 2.0f;  // 최대 크기 배수
+    public Vector3 initialScale;
+
+    public float scaleFactorY = 1.0f;
+    public float scaleFactorX = 1.0f;
+    public float minScaleMultiplier = 0.5f;
+    public float maxScaleMultiplier = 2.0f;
+    public float distanceFactor = 0.6f;
+    public float scaleFactor = 1.5f;
 
     void Start()
     {
-        if (objectB != null)
+        if (abdomen != null)
         {
-            initialScale = objectB.transform.localScale;  // 오브젝트 B의 초기 크기 저장
+            initialScale = abdomen.transform.localScale;
         }
 
-        Collider colliderA = objectA.GetComponent<Collider>();
-        Collider colliderB = objectB.GetComponent<Collider>();
+        Collider colliderTop = sizeAdjustTop.GetComponent<Collider>();
+        Collider colliderLeft = sizeAdjustLeft.GetComponent<Collider>();
+        Collider colliderAbdomen = abdomen.GetComponent<Collider>();
 
-        if (colliderA != null && colliderB != null)
+        if (colliderTop != null && colliderLeft != null && colliderAbdomen != null)
         {
-            Physics.IgnoreCollision(colliderA, colliderB);
+            Physics.IgnoreCollision(colliderTop, colliderAbdomen);
+            Physics.IgnoreCollision(colliderLeft, colliderAbdomen);
         }
     }
 
     void Update()
     {
-        if (objectA != null && objectB != null)
+        if (sizeAdjustTop != null && abdomen != null)
         {
-            // objectA와 objectB 사이의 거리 계산 (Y축 크기 조절)
-            float distanceY = Vector3.Distance(objectA.transform.position, objectB.transform.position);
+            float distanceY = distanceFactor * Vector3.Distance(sizeAdjustTop.transform.position, abdomen.transform.position);
             float scaleMultiplierY = Mathf.Clamp(minScaleMultiplier + (distanceY * scaleFactorY), minScaleMultiplier, maxScaleMultiplier);
 
-            // Y축 크기 조정
             Vector3 newScale = initialScale;
             newScale.y = initialScale.y * scaleMultiplierY;
 
-            // 만약 objectC가 설정되어 있다면, X축 크기도 조절
-            if (objectC != null)
+            if (sizeAdjustLeft != null)
             {
-                // objectC와 objectB 사이의 거리 계산 (X축 크기 조절)
-                float distanceX = Vector3.Distance(objectC.transform.position, objectB.transform.position);
+                float distanceX = distanceFactor * Vector3.Distance(sizeAdjustLeft.transform.position, abdomen.transform.position);
                 float scaleMultiplierX = Mathf.Clamp(minScaleMultiplier + (distanceX * scaleFactorX), minScaleMultiplier, maxScaleMultiplier);
 
-                // X축 크기 조정
                 newScale.x = initialScale.x * scaleMultiplierX;
             }
 
-            // 오브젝트 B의 크기 설정
-            objectB.transform.localScale = newScale;
+            abdomen.transform.localScale = scaleFactor * newScale;
         }
     }
 }
