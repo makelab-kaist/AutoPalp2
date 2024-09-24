@@ -10,13 +10,6 @@ public class DistanceBasedScaling : MonoBehaviour
     private float initialDistanceY;
     private float initialDistanceX;
 
-    // public float scaleFactorY = 1.0f;
-    // public float scaleFactorX = 1.0f;
-    // public float minScaleMultiplier = 0.5f;
-    // public float maxScaleMultiplier = 2.0f;
-    // public float distanceFactor = 0.6f;
-    // public float scaleFactor = 1.5f;
-
     void Start()
     {
         if (abdomen != null)
@@ -33,9 +26,6 @@ public class DistanceBasedScaling : MonoBehaviour
         {
             float updatedDistanceY = Vector3.Distance(sizeAdjustTop.transform.position, abdomen.transform.position);
 
-            // float distanceY = distanceFactor * Vector3.Distance(sizeAdjustTop.transform.position, abdomen.transform.position);
-            // float scaleMultiplierY = Mathf.Clamp(minScaleMultiplier + (distanceY * scaleFactorY), minScaleMultiplier, maxScaleMultiplier);
-
             Vector3 newScale = initialScale;
             newScale.y = initialScale.y * updatedDistanceY / initialDistanceY;
 
@@ -43,12 +33,6 @@ public class DistanceBasedScaling : MonoBehaviour
             {
                 float updatedDistanceX = Vector3.Distance(sizeAdjustLeft.transform.position, abdomen.transform.position);
                 newScale.x = initialScale.x * updatedDistanceX / initialDistanceX;
-
-
-                //     float distanceX = distanceFactor * Vector3.Distance(sizeAdjustLeft.transform.position, abdomen.transform.position);
-                //     float scaleMultiplierX = Mathf.Clamp(minScaleMultiplier + (distanceX * scaleFactorX), minScaleMultiplier, maxScaleMultiplier);
-
-                //     newScale.x = initialScale.x * scaleMultiplierX;
             }
 
             abdomen.transform.localScale = newScale;
