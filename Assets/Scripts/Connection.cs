@@ -8,14 +8,12 @@ using NativeWebSocket;
 public class Connection : MonoBehaviour
 {
     WebSocket websocket;
-    public TextMeshPro textMeshPro; // Reference to the TextMeshPro component
+    public TextMeshPro textMeshPro;
 
-    // Define an event for message received
     public event Action<string> OnMessageReceived;
 
     private bool isFirstArduinoAccess = true;
 
-    // Start is called before the first frame update
     async void Start()
     {
         websocket = new WebSocket("ws://192.168.1.84:3000");
@@ -39,25 +37,20 @@ public class Connection : MonoBehaviour
         {
             Debug.Log("OnMessage!");
 
-            // Decode the byte array to a string
             var message = System.Text.Encoding.UTF8.GetString(bytes);
             Debug.Log("Received from Arduino: " + message);
 
-            // Update the 3D text
             if (isFirstArduinoAccess)
             {
                 UpdateText(message);
                 isFirstArduinoAccess = false;
             }
 
-            // Trigger the event
             OnMessageReceived?.Invoke(message);
         };
 
-        // Keep sending messages at every 0.3s
         Invoke("SendWebSocketMessage", 0.3f);
 
-        // waiting for messages
         await websocket.Connect();
     }
 
@@ -72,7 +65,6 @@ public class Connection : MonoBehaviour
     {
         if (websocket.State == WebSocketState.Open)
         {
-            // For Arduino
             await websocket.SendText("8003126511234");
         }
     }
@@ -90,7 +82,6 @@ public class Connection : MonoBehaviour
         }
     }
 
-    // Method to send messages
     public void SendText(string message)
     {
         if (websocket.State == WebSocketState.Open)
