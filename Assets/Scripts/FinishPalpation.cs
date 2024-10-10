@@ -4,19 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using NativeWebSocket;
 
-public class Connection : MonoBehaviour
+public class FinishPalpation : MonoBehaviour
 {
     WebSocket websocket;
     public event Action<string> OnMessageReceived;
 
     private bool isFirstArduinoAccess = true;
 
-    // GameObject 참조 추가
-    public GameObject targetObject;    // 활성화할 GameObject
-    public Material targetMaterial;    // targetObject에 적용할 Material
-
-    public GameObject targetObject2;   // 비활성화할 GameObject
-    public Material targetMaterial2;   // targetObject2에 적용할 Material (필요시 사용)
+    // 두 개의 GameObject를 참조
+    public GameObject objectToDeactivate;  // 비활성화할 GameObject
+    public GameObject objectToDeactivate2;
+    public GameObject objectToActivate;    // 활성화할 GameObject
 
     async void Start()
     {
@@ -104,12 +102,13 @@ public class Connection : MonoBehaviour
     {
         if (message.Contains("data"))
         {
-            // targetObject를 활성화하고 targetObject2를 비활성화
-            SetActiveState(targetObject, true);
-            SetActiveState(targetObject2, false);
+            // 특정 GameObject를 비활성화하고 다른 GameObject를 활성화
+            SetActiveState(objectToDeactivate, false);
+            SetActiveState(objectToDeactivate2, false);
+            SetActiveState(objectToActivate, true);
 
             // Arduino에 다시 메시지 전송
-            SendMessageToArduino();
+            // SendMessageToArduino();
         }
     }
 

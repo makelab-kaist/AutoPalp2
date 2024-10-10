@@ -15,7 +15,7 @@ public class DrawLinesBetweenObjects : MonoBehaviour
 
         for (int i = 0; i < numberOfLines; i++)
         {
-            GameObject lineObject = new GameObject("LineRenderer_" + i);
+            GameObject lineObject = new GameObject("Line" + i);
             lineRenderers[i] = lineObject.AddComponent<LineRenderer>();
 
             lineRenderers[i].positionCount = 2;
