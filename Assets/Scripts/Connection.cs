@@ -11,12 +11,8 @@ public class Connection : MonoBehaviour
 
     private bool isFirstArduinoAccess = true;
 
-    // GameObject 참조 추가
-    public GameObject targetObject;    // 활성화할 GameObject
-    public Material targetMaterial;    // targetObject에 적용할 Material
-
-    public GameObject targetObject2;   // 비활성화할 GameObject
-    public Material targetMaterial2;   // targetObject2에 적용할 Material (필요시 사용)
+    public GameObject nextObject;
+    public GameObject currObject;
 
     async void Start()
     {
@@ -52,7 +48,6 @@ public class Connection : MonoBehaviour
             OnMessageReceived?.Invoke(message);
         };
 
-        // 이벤트 구독
         OnMessageReceived += HandleMessage;
 
         Invoke("SendWebSocketMessage", 0.3f);
@@ -76,16 +71,6 @@ public class Connection : MonoBehaviour
         }
     }
 
-    // Arduino로 다시 메시지를 보내는 함수
-    async void SendMessageToArduino()
-    {
-        if (websocket.State == WebSocketState.Open)
-        {
-            string message = "{\"cmd\": \"setReady\", \"value\": true}";
-            await websocket.SendText(message);
-        }
-    }
-
     private async void OnApplicationQuit()
     {
         await websocket.Close();
@@ -99,26 +84,22 @@ public class Connection : MonoBehaviour
         }
     }
 
-    // 메시지를 처리하는 함수
     private void HandleMessage(string message)
     {
         if (message.Contains("data"))
         {
-            // targetObject를 활성화하고 targetObject2를 비활성화
-            SetActiveState(targetObject, true);
-            SetActiveState(targetObject2, false);
+            SetActiveState(nextObject, true);
+            SetActiveState(currObject, false);
 
-            // Arduino에 다시 메시지 전송
-            SendMessageToArduino();
+            SendWebSocketMessage();
         }
     }
 
-    // GameObject의 활성화 상태를 변경하는 함수
     private void SetActiveState(GameObject obj, bool isActive)
     {
         if (obj != null)
         {
-            obj.SetActive(isActive);   // true면 활성화, false면 비활성화
+            obj.SetActive(isActive);
         }
     }
 }
