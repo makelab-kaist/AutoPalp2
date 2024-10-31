@@ -17,7 +17,7 @@ public class TextPainScale : MonoBehaviour
 
     private void Update()
     {
-        currentValue = Mathf.RoundToInt(65.78f * (targetObject.transform.position.x - initialPosition.x) + 5);
+        currentValue = Mathf.RoundToInt(62.5f * (targetObject.transform.position.x - initialPosition.x) + 5);
         currentValue = Mathf.Clamp(currentValue, 0, 10);
         textMeshPro.text = currentValue.ToString();
 

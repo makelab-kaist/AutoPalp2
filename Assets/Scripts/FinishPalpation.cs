@@ -11,7 +11,7 @@ public class FinishPalpation : MonoBehaviour
 
     private bool isFirstArduinoAccess = true;
 
-    public GameObject[] gameObjectsToDeactivate; // Array of GameObjects to deactivate
+    public GameObject[] gameObjectsToDeactivate;
     public GameObject audioFinish;
 
     async void Start()
@@ -77,12 +77,11 @@ public class FinishPalpation : MonoBehaviour
     {
         if (message.Contains("data"))
         {
-            // Deactivate all GameObjects in the array
             foreach (var obj in gameObjectsToDeactivate)
             {
                 SetActiveState(obj, false);
             }
-            // Activate audioFinish GameObject
+
             SetActiveState(audioFinish, true);
         }
     }
