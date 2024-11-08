@@ -4,15 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using NativeWebSocket;
 
-public class FinishPalpation : MonoBehaviour
+public class ResetAutoPalp : MonoBehaviour
 {
     WebSocket websocket;
     public event Action<string> OnMessageReceived;
-
-    private bool isFirstArduinoAccess = true;
-
-    public GameObject[] gameObjectsToDeactivate;
-    public GameObject audioFinish;
 
     async void Start()
     {
@@ -40,17 +35,10 @@ public class FinishPalpation : MonoBehaviour
             var message = System.Text.Encoding.UTF8.GetString(bytes);
             Debug.Log("Received from Arduino: " + message);
 
-            if (isFirstArduinoAccess)
-            {
-                isFirstArduinoAccess = false;
-            }
-
-            Invoke("SendWebSocketMessage", 0.3f);
-
             OnMessageReceived?.Invoke(message);
         };
 
-        OnMessageReceived += HandleMessage;
+        Invoke("SendWebSocketMessage", 0.3f);
 
         await websocket.Connect();
     }
@@ -74,34 +62,5 @@ public class FinishPalpation : MonoBehaviour
     private async void OnApplicationQuit()
     {
         await websocket.Close();
-    }
-
-    public void SendText(string message)
-    {
-        if (websocket.State == WebSocketState.Open)
-        {
-            websocket.SendText(message);
-        }
-    }
-
-    private void HandleMessage(string message)
-    {
-        if (message.Contains("data"))
-        {
-            foreach (var obj in gameObjectsToDeactivate)
-            {
-                SetActiveState(obj, false);
-            }
-
-            SetActiveState(audioFinish, true);
-        }
-    }
-
-    private void SetActiveState(GameObject obj, bool isActive)
-    {
-        if (obj != null)
-        {
-            obj.SetActive(isActive);
-        }
     }
 }

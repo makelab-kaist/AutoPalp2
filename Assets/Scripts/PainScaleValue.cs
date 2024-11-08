@@ -10,8 +10,8 @@ public class PainScaleValue : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI text;
 
-    public void OnSliderEvent(float volume)
+    public void OnSliderEvent(float value)
     {
-        text.text = $"{volume}";
+        text.text = $"{value}";
     }
 }
