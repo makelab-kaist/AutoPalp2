@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DistanceBasedScaling : MonoBehaviour
+public class AbdomenInterfaceSizeController : MonoBehaviour
 {
     public GameObject abdomen;
     public GameObject sizeAdjustLeft;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NativeWebSocket;
 
-public class Connection : MonoBehaviour
+public class PalpationSequenceManager : MonoBehaviour
 {
     WebSocket websocket;
     public event Action<string> OnMessageReceived;
