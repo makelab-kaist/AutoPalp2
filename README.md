@@ -1,17 +1,27 @@
-# StarterProject_UnityXR
+<p align="center">
+    <img src="./public/images/logo.png" alt="autopalp-logo" width="60%" />
+</p>
 
-A baseline repository for MR/VR development using Unity XR Interaction Toolkit
+---
 
-Repository Details:
-- Unity version [2022.3.13f1](https://unity.com/releases/editor/qa/lts-releases)
-- [XR Interaction Toolkit v3.0.3](https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@3.0/manual/index.html)
-- [XR Hands v1.4.1](https://docs.unity3d.com/Packages/com.unity.xr.hands@1.4/manual/index.html)
+## Device Demo
 
+[[Youtube](https://youtu.be/FSd1KUu1d40?si=FxYpzbRAUv_d467h)]
 
-Project details:
-- The project uses 3D render pipeline.
-- The Build settings have already been configured such that the built app can run on the Open XR devices.
-- All the examples scenes can be found under the Assets/Samples folder.
+<a href="https://youtu.be/FSd1KUu1d40?si=FxYpzbRAUv_d467h">
+    <img src="./public/images/demo.png" alt="autopalp-demo" width="100%" />
+</a>
 
-NOTE:
-Make sure to change the Company Name and Product Name under player settings.# AutoPalp
+## Hardware
+
+<img src="./public/images/algometer.png" alt="autopalp-algometer" width="100%" />
+
+<img src="./public/images/patient-clicker.png" alt="autopalp-patient-clicker" width="100%" />
+
+## System Architecture
+
+<img src="./public/images/system-architecture.png" alt="autopalp-system-architecture" width="100%" />
+
+## License
+
+AutoPalp is developed by joint collaboration between [Korea University College of Medicine](https://medicine.korea.ac.kr/en/index.do) and [KAIST Make Lab](https://make.kaist.ac.kr/).
