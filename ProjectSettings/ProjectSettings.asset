@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: MakeLab
-  productName: AutoPalp
+  productName: AutoPalp2
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -139,9 +139,12 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.1
+  bundleVersion: 0.1.0
   preloadedAssets:
   - {fileID: 0}
+  - {fileID: 8858044987389814785, guid: 1986540f0ed865f498cef65a9e63ac78, type: 2}
+  - {fileID: 11400000, guid: 651998d2674fb4f6285a17e601d9c7db, type: 2}
+  - {fileID: 6550243314155099647, guid: 8d7cef70177090b43a54a8f9efb5377a, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1

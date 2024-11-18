@@ -1,14 +1,16 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using NativeWebSocket;
 
 /// <summary>
-/// Manages the sequence of palpation events, including communication with an Arduino via WebSocket.
+/// Handles communication with an Arduino via WebSocket and manages the game state after finishing palpation.
 /// </summary>
-public class PalpationSequenceManager : MonoBehaviour
+public class PalpationCompletionHandler : MonoBehaviour
 {
     /// <summary>
-    /// WebSocket instance for communicating with the Arduino.
+    /// The WebSocket instance for communication with the Arduino.
     /// </summary>
     private WebSocket arduinoWebSocket;
 
@@ -18,63 +20,66 @@ public class PalpationSequenceManager : MonoBehaviour
     public event Action<string> OnMessageReceived;
 
     /// <summary>
-    /// Tracks whether this is the first interaction with the Arduino.
+    /// Tracks whether this is the first access to the Arduino.
     /// </summary>
     private bool isFirstArduinoMessage = true;
 
     /// <summary>
-    /// The next GameObject to activate in the sequence.
+    /// Array of GameObjects to deactivate when the palpation process is completed.
     /// </summary>
-    public GameObject nextStepObject;
+    public GameObject[] objectsToDeactivate;
 
     /// <summary>
-    /// The current GameObject to deactivate in the sequence.
+    /// GameObject that plays a finish audio cue.
     /// </summary>
-    public GameObject currentStepObject;
+    public GameObject finishAudioObject;
 
     async void Start()
     {
         // Initialize the WebSocket connection to the Arduino.
         arduinoWebSocket = new WebSocket("ws://192.168.0.167:3000");
 
-        // WebSocket connection opened.
+        // Event triggered when the WebSocket connection is opened.
         arduinoWebSocket.OnOpen += () =>
         {
             Debug.Log("WebSocket connection opened!");
         };
 
-        // WebSocket error handler.
+        // Event triggered when there is an error in the WebSocket connection.
         arduinoWebSocket.OnError += (error) =>
         {
             Debug.Log("WebSocket error: " + error);
         };
 
-        // WebSocket connection closed.
+        // Event triggered when the WebSocket connection is closed.
         arduinoWebSocket.OnClose += (code) =>
         {
             Debug.Log("WebSocket connection closed with code: " + code);
         };
 
-        // Message received from WebSocket.
+        // Event triggered when a message is received from the WebSocket.
         arduinoWebSocket.OnMessage += (bytes) =>
         {
-            string message = System.Text.Encoding.UTF8.GetString(bytes);
-            Debug.Log("Message received from Arduino: " + message);
+            Debug.Log("Message received from Arduino!");
 
+            var message = System.Text.Encoding.UTF8.GetString(bytes);
+            Debug.Log("Received message: " + message);
+
+            // Process the first message from the Arduino differently.
             if (isFirstArduinoMessage)
             {
                 isFirstArduinoMessage = false;
             }
 
-            // Invoke event for message processing.
+            // Send a reset command to the Arduino after a short delay.
+            Invoke(nameof(SendResetCommandToArduino), 0.3f);
+
+            // Notify any listeners about the received message.
             OnMessageReceived?.Invoke(message);
         };
 
-        // Subscribe to the message handler.
+        // Subscribe to message handling logic.
         OnMessageReceived += ProcessArduinoMessage;
-
-        // Send initial readiness message after a short delay.
-        Invoke(nameof(SendReadyMessageToArduino), 0.3f);
 
         // Connect to the WebSocket.
         await arduinoWebSocket.Connect();
@@ -83,28 +88,28 @@ public class PalpationSequenceManager : MonoBehaviour
     void Update()
     {
 #if !UNITY_WEBGL || UNITY_EDITOR
-        // Dispatch WebSocket messages for platforms that require explicit handling.
+        // Dispatch WebSocket messages on platforms where WebSocket behavior is thread-dependent.
         arduinoWebSocket.DispatchMessageQueue();
 #endif
     }
 
     /// <summary>
-    /// Sends a "ready" command to the Arduino to signal readiness for the next step.
+    /// Sends a reset command to the Arduino via WebSocket.
     /// </summary>
-    private async void SendReadyMessageToArduino()
+    private async void SendResetCommandToArduino()
     {
         if (arduinoWebSocket.State == WebSocketState.Open)
         {
-            string readyCommand = "{\"cmd\": \"setReady\", \"value\": true}";
-            await arduinoWebSocket.SendText(readyCommand);
+            string resetCommand = "{\"cmd\": \"reset\"}";
+            await arduinoWebSocket.SendText(resetCommand);
         }
     }
 
     /// <summary>
-    /// Sends a custom text message to the Arduino.
+    /// Sends a custom message to the Arduino via WebSocket.
     /// </summary>
     /// <param name="message">The message to send.</param>
-    public async void SendCustomMessageToArduino(string message)
+    public async void SendCustomMessage(string message)
     {
         if (arduinoWebSocket.State == WebSocketState.Open)
         {
@@ -123,30 +128,32 @@ public class PalpationSequenceManager : MonoBehaviour
     /// <summary>
     /// Processes messages received from the Arduino.
     /// </summary>
-    /// <param name="message">The message received.</param>
+    /// <param name="message">The received message.</param>
     private void ProcessArduinoMessage(string message)
     {
         if (message.Contains("data"))
         {
-            // Activate the next step object and deactivate the current step object.
-            SetGameObjectActiveState(nextStepObject, true);
-            SetGameObjectActiveState(currentStepObject, false);
+            // Deactivate specified objects.
+            foreach (var obj in objectsToDeactivate)
+            {
+                SetObjectActiveState(obj, false);
+            }
 
-            // Notify Arduino that the next step is ready.
-            SendReadyMessageToArduino();
+            // Activate the finish audio cue.
+            SetObjectActiveState(finishAudioObject, true);
         }
     }
 
     /// <summary>
     /// Safely sets the active state of a GameObject.
     /// </summary>
-    /// <param name="gameObject">The GameObject to modify.</param>
+    /// <param name="obj">The GameObject to modify.</param>
     /// <param name="isActive">The desired active state.</param>
-    private void SetGameObjectActiveState(GameObject gameObject, bool isActive)
+    private void SetObjectActiveState(GameObject obj, bool isActive)
     {
-        if (gameObject != null)
+        if (obj != null)
         {
-            gameObject.SetActive(isActive);
+            obj.SetActive(isActive);
         }
     }
 }
