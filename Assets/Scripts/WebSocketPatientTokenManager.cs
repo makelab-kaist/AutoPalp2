@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using Newtonsoft.Json;
 using NativeWebSocket;
@@ -20,6 +21,9 @@ public class WebSocketPatientTokenManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI displayText;
 
+    [SerializeField]
+    private Button sendButton;
+
     /// <summary>
     /// Event triggered when a message is received from the WebSocket.
     /// </summary>
@@ -31,22 +35,13 @@ public class WebSocketPatientTokenManager : MonoBehaviour
         arduinoWebSocket = new WebSocket("ws://192.168.0.167:3000");
 
         // WebSocket connection opened.
-        arduinoWebSocket.OnOpen += () =>
-        {
-            Debug.Log("WebSocket connection opened!");
-        };
+        arduinoWebSocket.OnOpen += () => Debug.Log("WebSocket connection opened!");
 
         // WebSocket error handler.
-        arduinoWebSocket.OnError += (error) =>
-        {
-            Debug.Log("WebSocket error: " + error);
-        };
+        arduinoWebSocket.OnError += (error) => Debug.Log("WebSocket error: " + error);
 
         // WebSocket connection closed.
-        arduinoWebSocket.OnClose += (code) =>
-        {
-            Debug.Log("WebSocket connection closed with code: " + code);
-        };
+        arduinoWebSocket.OnClose += (code) => Debug.Log("WebSocket connection closed with code: " + code);
 
         // Message received from the WebSocket.
         arduinoWebSocket.OnMessage += (bytes) =>
@@ -61,10 +56,12 @@ public class WebSocketPatientTokenManager : MonoBehaviour
             DisplayPatientData(message);
         };
 
-        // Send the initial reset command after a short delay.
+        displayText.text = "Loading...";
+
+        sendButton.onClick.AddListener(SendSecondMessage);
+
         Invoke(nameof(SendTokenMessage), 0.3f);
 
-        // Connect to the WebSocket.
         await arduinoWebSocket.Connect();
     }
 
@@ -86,9 +83,6 @@ public class WebSocketPatientTokenManager : MonoBehaviour
             string getTokenCommand = "token";
             await arduinoWebSocket.SendText(getTokenCommand);
             Debug.Log("Sent: " + getTokenCommand);
-
-            // Send the next message after a short delay.
-            Invoke(nameof(SendSecondMessage), 1.3f);
         }
     }
 
@@ -117,17 +111,25 @@ public class WebSocketPatientTokenManager : MonoBehaviour
             var patientData = JsonConvert.DeserializeObject<PatientData>(jsonData);
 
             // Format and display the data on the TextMeshPro element.
-            displayText.text = $"Name: {patientData.name}\n" +
-                               $"Patient ID: {patientData.patientID}\n" +
-                               $"Age: {patientData.age}\n" +
-                               $"Height: {patientData.height} cm\n" +
-                               $"Weight: {patientData.weight} kg\n" +
-                               $"BMI: {patientData.bmi:F2}";
+            if (patientData.patientID.Length == 13)
+            {
+                // Format and display the data on the TextMeshPro element.
+                displayText.text = $"Name: {patientData.name}\n" +
+                                $"Patient ID: {patientData.patientID}\n" +
+                                $"Age: {patientData.age}\n" +
+                                $"Height: {patientData.height} cm\n" +
+                                $"Weight: {patientData.weight} kg\n" +
+                                $"BMI: {patientData.bmi:F2}";
+            }
+            else
+            {
+                displayText.text = "Loading...";
+            }
         }
         catch (Exception ex)
         {
             Debug.LogError("Failed to parse JSON data: " + ex.Message);
-            displayText.text = "Error: Failed to display patient data.";
+            displayText.text = "Loading...";
         }
     }
 

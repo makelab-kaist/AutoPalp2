@@ -38,22 +38,13 @@ public class PalpationSequenceManager : MonoBehaviour
         arduinoWebSocket = new WebSocket("ws://192.168.0.167:3000");
 
         // WebSocket connection opened.
-        arduinoWebSocket.OnOpen += () =>
-        {
-            Debug.Log("WebSocket connection opened!");
-        };
+        arduinoWebSocket.OnOpen += () => Debug.Log("WebSocket connection opened!");
 
         // WebSocket error handler.
-        arduinoWebSocket.OnError += (error) =>
-        {
-            Debug.Log("WebSocket error: " + error);
-        };
+        arduinoWebSocket.OnError += (error) => Debug.Log("WebSocket error: " + error);
 
         // WebSocket connection closed.
-        arduinoWebSocket.OnClose += (code) =>
-        {
-            Debug.Log("WebSocket connection closed with code: " + code);
-        };
+        arduinoWebSocket.OnClose += (code) => Debug.Log("WebSocket connection closed with code: " + code);
 
         // Message received from WebSocket.
         arduinoWebSocket.OnMessage += (bytes) =>
@@ -73,7 +64,7 @@ public class PalpationSequenceManager : MonoBehaviour
         // Subscribe to the message handler.
         OnMessageReceived += ProcessArduinoMessage;
 
-        // Send initial readiness message after a short delay.
+        // Send initial readiness message.
         Invoke(nameof(SendReadyMessageToArduino), 0.3f);
 
         // Connect to the WebSocket.
