@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using NativeWebSocket;
+using TMPro;
 
 /// <summary>
 /// Manages the sequence of palpation events, including communication with an Arduino via WebSocket.
@@ -31,6 +33,21 @@ public class PalpationSequenceManager : MonoBehaviour
     /// The current GameObject to deactivate in the sequence.
     /// </summary>
     public GameObject currentStepObject;
+
+    /// <summary>
+    /// The slider to activate upon receiving a specific message.
+    /// </summary>
+    public Slider targetSlider;
+
+    /// <summary>
+    /// The button to activate upon receiving a specific message.
+    /// </summary>
+    public Button targetButton;
+
+    /// <summary>
+    /// The TextMeshProUGUI component displaying the number to send.
+    /// </summary>
+    public TextMeshProUGUI numberText;
 
     async void Start()
     {
@@ -119,12 +136,85 @@ public class PalpationSequenceManager : MonoBehaviour
     {
         if (message.Contains("data"))
         {
-            // Activate the next step object and deactivate the current step object.
-            SetGameObjectActiveState(nextStepObject, true);
-            SetGameObjectActiveState(currentStepObject, false);
+            ActivateUIElements();
+        }
+    }
 
-            // Notify Arduino that the next step is ready.
-            SendReadyMessageToArduino();
+    /// <summary>
+    /// Activates the target slider and button, and sets up the button click listener.
+    /// </summary>
+    private void ActivateUIElements()
+    {
+        if (targetSlider != null)
+        {
+            targetSlider.gameObject.SetActive(true);
+        }
+
+        if (targetButton != null)
+        {
+            targetButton.gameObject.SetActive(true);
+
+            // 버튼 클릭 시 Step 진행하도록 리스너 추가.
+            targetButton.onClick.AddListener(OnButtonClick);
+        }
+    }
+
+    /// <summary>
+    /// Handles button click to proceed to the next step and send number.
+    /// </summary>
+    private void OnButtonClick()
+    {
+        // Step 전환
+        SetGameObjectActiveState(nextStepObject, true);
+        SetGameObjectActiveState(currentStepObject, false);
+
+        // 버튼 클릭 후 리스너 제거 (중복 방지)
+        targetButton.onClick.RemoveListener(OnButtonClick);
+
+        // Send the number from the text as a WebSocket message
+        SendNumberToArduino();
+
+        // 비활성화: targetSlider와 targetButton을 비활성화
+        DeactivateUIElements();
+
+        // Notify Arduino that the next step is ready.
+        // SendReadyMessageToArduino();
+    }
+
+    /// <summary>
+    /// Sends the number displayed in the TextMeshProUGUI component to the Arduino via WebSocket.
+    /// </summary>
+    private async void SendNumberToArduino()
+    {
+        if (arduinoWebSocket.State == WebSocketState.Open && numberText != null)
+        {
+            if (int.TryParse(numberText.text, out int number) && number >= 0 && number <= 10)
+            {
+                string numberMessage = $"{{\"pain\": {number}}}";
+                await arduinoWebSocket.SendText(numberMessage);
+                Debug.Log("Number sent to Arduino: " + number);
+            }
+            else
+            {
+                Debug.LogError("Invalid number format or out of range.");
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Deactivates the target slider and button.
+    /// </summary>
+    private void DeactivateUIElements()
+    {
+        if (targetSlider != null)
+        {
+            targetSlider.gameObject.SetActive(false);
+        }
+
+        if (targetButton != null)
+        {
+            targetButton.gameObject.SetActive(false);
         }
     }
 
