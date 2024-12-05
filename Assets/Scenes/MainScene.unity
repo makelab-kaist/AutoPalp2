@@ -4318,6 +4318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc0d6b2ea6024653812eaa4910e8193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFirstArduinoMessage: 1
   objectsToDeactivate:
   - {fileID: 677385698}
   - {fileID: 2055309388}
@@ -15928,6 +15929,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc0d6b2ea6024653812eaa4910e8193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isFirstArduinoMessage: 1
   objectsToDeactivate:
   - {fileID: 677385698}
   - {fileID: 2055309388}

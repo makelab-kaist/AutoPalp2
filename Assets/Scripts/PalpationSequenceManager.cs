@@ -34,6 +34,10 @@ public class PalpationSequenceManager : MonoBehaviour
     /// List of final step GameObjects for activation/deactivation at the end of the sequence.
     /// </summary>
     public List<GameObject> finalStepObjects;
+
+    /// <summary>
+    /// GameObject for the final audio element to activate at the end of the sequence.
+    /// </summary>
     public GameObject finalAudio;
 
     /// <summary>
@@ -179,20 +183,20 @@ public class PalpationSequenceManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles button click to proceed to the next step and send number.
+    /// Handles button click to proceed to the next step and send the number to the Arduino.
     /// </summary>
     private void OnButtonClick()
     {
-        // Step 전환
+        // Proceed to the next step in the sequence.
         ProceedToNextStep();
 
-        // 버튼 클릭 후 리스너 제거 (중복 방지)
+        // Remove the button click listener to prevent duplicate actions.
         targetButton.onClick.RemoveListener(OnButtonClick);
-        
-        // Send the number from the text as a WebSocket message
+
+        // Send the number to the Arduino.
         SendNumberToArduino();
 
-        // 비활성화: targetSlider와 targetButton을 비활성화
+        // Deactivate the UI elements (slider and button).
         DeactivateUIElements();
     }
 
@@ -234,13 +238,14 @@ public class PalpationSequenceManager : MonoBehaviour
                 SendResetCommandToArduino();
                 Debug.Log("All steps completed.");
 
+                // Quit the application after a short delay.
                 Invoke(nameof(QuitApplication), 2f);
             }
         }
     }
 
     /// <summary>
-    /// Deactivates all final step objects.
+    /// Activates the final audio and deactivates all final step objects.
     /// </summary>
     private void DeactivateAllAndActivateFinalObject()
     {
