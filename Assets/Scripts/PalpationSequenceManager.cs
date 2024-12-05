@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using NativeWebSocket;
@@ -25,14 +26,20 @@ public class PalpationSequenceManager : MonoBehaviour
     private bool isFirstArduinoMessage = true;
 
     /// <summary>
-    /// The next GameObject to activate in the sequence.
+    /// List of step GameObjects for sequential activation/deactivation.
     /// </summary>
-    public GameObject nextStepObject;
+    public List<GameObject> stepObjects;
 
     /// <summary>
-    /// The current GameObject to deactivate in the sequence.
+    /// List of final step GameObjects for activation/deactivation at the end of the sequence.
     /// </summary>
-    public GameObject currentStepObject;
+    public List<GameObject> finalStepObjects;
+    public GameObject finalAudio;
+
+    /// <summary>
+    /// Index of the current step in the sequence.
+    /// </summary>
+    private int currentStepIndex = 0;
 
     /// <summary>
     /// The slider to activate upon receiving a specific message.
@@ -109,6 +116,18 @@ public class PalpationSequenceManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Sends a reset command to the Arduino via WebSocket.
+    /// </summary>
+    private async void SendResetCommandToArduino()
+    {
+        if (arduinoWebSocket.State == WebSocketState.Open)
+        {
+            string resetCommand = "{\"cmd\": \"reset\"}";
+            await arduinoWebSocket.SendText(resetCommand);
+        }
+    }
+
+    /// <summary>
     /// Sends a custom text message to the Arduino.
     /// </summary>
     /// <param name="message">The message to send.</param>
@@ -165,20 +184,16 @@ public class PalpationSequenceManager : MonoBehaviour
     private void OnButtonClick()
     {
         // Step 전환
-        SetGameObjectActiveState(nextStepObject, true);
-        SetGameObjectActiveState(currentStepObject, false);
+        ProceedToNextStep();
 
         // 버튼 클릭 후 리스너 제거 (중복 방지)
         targetButton.onClick.RemoveListener(OnButtonClick);
-
+        
         // Send the number from the text as a WebSocket message
         SendNumberToArduino();
 
         // 비활성화: targetSlider와 targetButton을 비활성화
         DeactivateUIElements();
-
-        // Notify Arduino that the next step is ready.
-        // SendReadyMessageToArduino();
     }
 
     /// <summary>
@@ -188,19 +203,54 @@ public class PalpationSequenceManager : MonoBehaviour
     {
         if (arduinoWebSocket.State == WebSocketState.Open && numberText != null)
         {
-            if (int.TryParse(numberText.text, out int number) && number >= 0 && number <= 10)
+            if (int.TryParse(numberText.text, out int number))
             {
                 string numberMessage = $"{{\"pain\": {number}}}";
                 await arduinoWebSocket.SendText(numberMessage);
                 Debug.Log("Number sent to Arduino: " + number);
             }
+        }
+    }
+
+    /// <summary>
+    /// Moves to the next step in the sequence by updating active GameObjects based on index.
+    /// </summary>
+    private void ProceedToNextStep()
+    {
+        if (currentStepIndex < stepObjects.Count)
+        {
+            SetGameObjectActiveState(stepObjects[currentStepIndex], false);
+
+            currentStepIndex++;
+
+            if (currentStepIndex < stepObjects.Count)
+            {
+                SetGameObjectActiveState(stepObjects[currentStepIndex], true);
+                SendReadyMessageToArduino();
+            }
             else
             {
-                Debug.LogError("Invalid number format or out of range.");
+                DeactivateAllAndActivateFinalObject();
+                SendResetCommandToArduino();
+                Debug.Log("All steps completed.");
+
+                Invoke(nameof(QuitApplication), 2f);
             }
         }
     }
 
+    /// <summary>
+    /// Deactivates all final step objects.
+    /// </summary>
+    private void DeactivateAllAndActivateFinalObject()
+    {
+        SetGameObjectActiveState(finalAudio, true);
+        
+        foreach (var obj in finalStepObjects)
+        {
+            SetGameObjectActiveState(obj, false);
+        }
+    }
 
     /// <summary>
     /// Deactivates the target slider and button.
@@ -229,5 +279,18 @@ public class PalpationSequenceManager : MonoBehaviour
         {
             gameObject.SetActive(isActive);
         }
+    }
+
+        /// <summary>
+    /// Quits the application after the final step.
+    /// </summary>
+    private void QuitApplication()
+    {
+        Debug.Log("Application quitting...");
+    #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+    #else
+        Application.Quit();
+    #endif
     }
 }

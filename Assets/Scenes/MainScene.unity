@@ -131,7 +131,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2534843}
-  - component: {fileID: 2534844}
   - component: {fileID: 2534845}
   m_Layer: 0
   m_Name: PalpationSequence
@@ -155,23 +154,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1761957333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2534844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2534842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f202ecf042f7540a2ad97bbf9491069e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextStepObject: {fileID: 2118379006}
-  currentStepObject: {fileID: 1761957332}
-  targetSlider: {fileID: 450008939}
-  targetButton: {fileID: 1686032315}
-  numberText: {fileID: 1243455503}
 --- !u!114 &2534845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,6 +276,7 @@ Transform:
   - {fileID: 287584434}
   - {fileID: 476723540}
   - {fileID: 2100825614}
+  - {fileID: 1903372374}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &42571972
@@ -1304,7 +1287,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 244442301}
-  - component: {fileID: 244442302}
   - component: {fileID: 244442303}
   m_Layer: 0
   m_Name: PalpationSequence
@@ -1328,23 +1310,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 492140337}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &244442302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 244442300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f202ecf042f7540a2ad97bbf9491069e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextStepObject: {fileID: 1089237482}
-  currentStepObject: {fileID: 492140336}
-  targetSlider: {fileID: 450008939}
-  targetButton: {fileID: 1686032315}
-  numberText: {fileID: 1243455503}
 --- !u!114 &244442303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4318,7 +4283,6 @@ GameObject:
   m_Component:
   - component: {fileID: 678860745}
   - component: {fileID: 678860746}
-  - component: {fileID: 678860747}
   - component: {fileID: 678860748}
   m_Layer: 0
   m_Name: PalpationCompletion
@@ -4363,23 +4327,6 @@ MonoBehaviour:
   - {fileID: 818671489}
   - {fileID: 1805324330}
   finishAudioObject: {fileID: 1670633161}
---- !u!114 &678860747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 678860744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f202ecf042f7540a2ad97bbf9491069e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextStepObject: {fileID: 2100825612}
-  currentStepObject: {fileID: 1089237482}
-  targetSlider: {fileID: 450008939}
-  targetButton: {fileID: 1686032315}
-  numberText: {fileID: 1243455503}
 --- !u!114 &678860748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6260,7 +6207,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2130331530761912218, guid: d661f645c81f29b4aa596207971ae441, type: 3}
       propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2130331530761912218, guid: d661f645c81f29b4aa596207971ae441, type: 3}
       propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -6313,7 +6260,7 @@ PrefabInstance:
     - target: {fileID: 2130331530761912218, guid: d661f645c81f29b4aa596207971ae441, type: 3}
       propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[5].m_Target
       value: 
-      objectReference: {fileID: 916477932}
+      objectReference: {fileID: 1903372372}
     - target: {fileID: 2130331530761912218, guid: d661f645c81f29b4aa596207971ae441, type: 3}
       propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[6].m_Target
       value: 
@@ -10815,7 +10762,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1584736929}
-  - component: {fileID: 1584736930}
   - component: {fileID: 1584736931}
   m_Layer: 0
   m_Name: PalpationSequence
@@ -10839,23 +10785,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2118379007}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1584736930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584736928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f202ecf042f7540a2ad97bbf9491069e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextStepObject: {fileID: 1060128919}
-  currentStepObject: {fileID: 2118379006}
-  targetSlider: {fileID: 450008939}
-  targetButton: {fileID: 1686032315}
-  numberText: {fileID: 1243455503}
 --- !u!114 &1584736931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12709,7 +12638,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1762239968}
-  - component: {fileID: 1762239969}
   - component: {fileID: 1762239970}
   m_Layer: 0
   m_Name: PalpationSequence
@@ -12733,23 +12661,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1060128920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1762239969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1762239967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f202ecf042f7540a2ad97bbf9491069e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextStepObject: {fileID: 492140336}
-  currentStepObject: {fileID: 1060128919}
-  targetSlider: {fileID: 450008939}
-  targetButton: {fileID: 1686032315}
-  numberText: {fileID: 1243455503}
 --- !u!114 &1762239970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13699,6 +13610,68 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4455438662752596672, guid: b0c78422845bac948a9080175e57ffff, type: 3}
   m_PrefabInstance: {fileID: 1887884880}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1903372372
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1903372374}
+  - component: {fileID: 1903372373}
+  m_Layer: 0
+  m_Name: PalpationSequenceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1903372373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903372372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f202ecf042f7540a2ad97bbf9491069e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stepObjects:
+  - {fileID: 1761957332}
+  - {fileID: 2118379006}
+  - {fileID: 1060128919}
+  - {fileID: 492140336}
+  - {fileID: 1089237482}
+  finalStepObjects:
+  - {fileID: 677385698}
+  - {fileID: 2055309388}
+  - {fileID: 1760596602}
+  - {fileID: 489427756}
+  - {fileID: 1006280886}
+  - {fileID: 818671489}
+  - {fileID: 1805324330}
+  finalAudio: {fileID: 1670633161}
+  targetSlider: {fileID: 450008939}
+  targetButton: {fileID: 1686032315}
+  numberText: {fileID: 1243455503}
+--- !u!4 &1903372374
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903372372}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 30201155}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1929421353
 GameObject:
   m_ObjectHideFlags: 0
