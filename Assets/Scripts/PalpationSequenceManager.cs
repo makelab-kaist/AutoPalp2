@@ -92,6 +92,8 @@ public class PalpationSequenceManager : MonoBehaviour
         // Subscribe to the message handler.
         OnMessageReceived += ProcessArduinoMessage;
 
+        SetGameObjectActiveState(stepObjects[0], true);
+
         // Send initial readiness message.
         Invoke(nameof(SendReadyMessageToArduino), 0.3f);
 
