@@ -196,6 +196,9 @@ public class PalpationSequenceManager : MonoBehaviour
         // Send the number to the Arduino.
         SendNumberToArduino();
 
+        if (targetSlider != null)
+            targetSlider.value = 5;
+
         // Deactivate the UI elements (slider and button).
         DeactivateUIElements();
     }
