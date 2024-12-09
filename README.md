@@ -4,6 +4,8 @@
 
 ---
 
+View full documentation on [autopalp.vercel.app](https://autopalp.vercel.app/autopalp2)
+
 ## Device Demo
 
 [[Youtube](https://youtu.be/FSd1KUu1d40?si=FxYpzbRAUv_d467h)]
