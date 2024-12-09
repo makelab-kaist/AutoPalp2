@@ -52,13 +52,17 @@ public class WebSocketPatientTokenManager : MonoBehaviour
             // Invoke the event for external message handling.
             OnMessageReceived?.Invoke(message);
 
-            // Display the received data.
-            DisplayPatientData(message);
+            var patientData = JsonConvert.DeserializeObject<PatientData>(message);
+
+            if (patientData.patientID.Length == 13)
+            {
+                DisplayPatientData(message); // Display the received data.
+            }
         };
 
         displayText.text = "Loading...";
 
-        sendButton.onClick.AddListener(SendSecondMessage);
+        sendButton.onClick.AddListener(SendPatientDataMessage);
 
         Invoke(nameof(SendTokenMessage), 0.3f);
 
@@ -87,9 +91,22 @@ public class WebSocketPatientTokenManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Sends the reset command to the WebSocket.
+    /// </summary>
+    private async void SendResetCommand()
+    {
+        if (arduinoWebSocket.State == WebSocketState.Open)
+        {
+            string resetCommand = "{\"cmd\": \"reset\"}";
+            await arduinoWebSocket.SendText(resetCommand);
+            Debug.Log("Reset command sent to Arduino.");
+        }
+    }
+
+    /// <summary>
     /// Sends the "8001011234567" message to the WebSocket.
     /// </summary>
-    private async void SendSecondMessage()
+    private async void SendPatientDataMessage()
     {
         if (arduinoWebSocket.State == WebSocketState.Open)
         {
