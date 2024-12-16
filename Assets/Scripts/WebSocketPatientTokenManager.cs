@@ -60,7 +60,7 @@ public class WebSocketPatientTokenManager : MonoBehaviour
             }
         };
 
-        displayText.text = "Loading...";
+        displayText.text = "        Loading...";
 
         sendButton.onClick.AddListener(SendPatientDataMessage);
 
@@ -125,8 +125,7 @@ public class WebSocketPatientTokenManager : MonoBehaviour
         try
         {
             displayText.text = $"Name: {patientData.name}\n" +
-                            $"Patient ID: {patientData.patientID}\n" +
-                            $"Age: {patientData.age}\n" +
+                            $"DOB: {patientData.dob:yyyy-MM-dd}\n" +
                             $"Height: {patientData.height} cm\n" +
                             $"Weight: {patientData.weight} kg\n" +
                             $"BMI: {patientData.bmi:F2}";
@@ -153,7 +152,7 @@ public class WebSocketPatientTokenManager : MonoBehaviour
     {
         public string name { get; set; }
         public string patientID { get; set; }
-        public int age { get; set; }
+        public DateTime dob { get; set; }
         public float height { get; set; }
         public float weight { get; set; }
         public float bmi { get; set; }
