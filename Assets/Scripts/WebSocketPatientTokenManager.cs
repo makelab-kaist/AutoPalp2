@@ -56,7 +56,7 @@ public class WebSocketPatientTokenManager : MonoBehaviour
 
             if (patientData.patientID.Length == 13)
             {
-                DisplayPatientData(message); // Display the received data.
+                DisplayPatientData(patientData); // Display the received data.
             }
         };
 
@@ -119,29 +119,17 @@ public class WebSocketPatientTokenManager : MonoBehaviour
     /// <summary>
     /// Displays the received patient data on the TextMeshProUGUI element.
     /// </summary>
-    /// <param name="jsonData">The JSON string received from the WebSocket.</param>
-    private void DisplayPatientData(string jsonData)
+    /// <param name="patientData">The PatientData object received from the WebSocket.</param>
+    private void DisplayPatientData(PatientData patientData)
     {
         try
         {
-            // Parse the JSON data.
-            var patientData = JsonConvert.DeserializeObject<PatientData>(jsonData);
-
-            // Format and display the data on the TextMeshPro element.
-            if (patientData.patientID.Length == 13)
-            {
-                // Format and display the data on the TextMeshPro element.
-                displayText.text = $"Name: {patientData.name}\n" +
-                                $"Patient ID: {patientData.patientID}\n" +
-                                $"Age: {patientData.age}\n" +
-                                $"Height: {patientData.height} cm\n" +
-                                $"Weight: {patientData.weight} kg\n" +
-                                $"BMI: {patientData.bmi:F2}";
-            }
-            else
-            {
-                displayText.text = "Loading...";
-            }
+            displayText.text = $"Name: {patientData.name}\n" +
+                            $"Patient ID: {patientData.patientID}\n" +
+                            $"Age: {patientData.age}\n" +
+                            $"Height: {patientData.height} cm\n" +
+                            $"Weight: {patientData.weight} kg\n" +
+                            $"BMI: {patientData.bmi:F2}";
         }
         catch (Exception ex)
         {
