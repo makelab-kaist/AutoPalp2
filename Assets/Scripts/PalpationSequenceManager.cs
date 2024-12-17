@@ -63,7 +63,7 @@ public class PalpationSequenceManager : MonoBehaviour
     async void Start()
     {
         // Initialize the WebSocket connection to the Arduino.
-        arduinoWebSocket = new WebSocket("ws://192.168.0.167:3000");
+        arduinoWebSocket = new WebSocket("ws://192.168.0.2:3000");
 
         // WebSocket connection opened.
         arduinoWebSocket.OnOpen += () => Debug.Log("WebSocket connection opened!");
