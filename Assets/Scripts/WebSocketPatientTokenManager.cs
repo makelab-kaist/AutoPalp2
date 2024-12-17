@@ -87,6 +87,8 @@ public class WebSocketPatientTokenManager : MonoBehaviour
             string getTokenCommand = "token";
             await arduinoWebSocket.SendText(getTokenCommand);
             Debug.Log("Sent: " + getTokenCommand);
+
+            Invoke(nameof(SendResetCommand), 0.1f);
         }
     }
 
