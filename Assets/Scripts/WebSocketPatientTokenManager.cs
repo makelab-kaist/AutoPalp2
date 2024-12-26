@@ -24,6 +24,9 @@ public class WebSocketPatientTokenManager : MonoBehaviour
     [SerializeField]
     private Button sendButton;
 
+    [SerializeField]
+    private string webSocketUrl = "ws://192.168.0.139:3000";
+
     /// <summary>
     /// Event triggered when a message is received from the WebSocket.
     /// </summary>
@@ -32,7 +35,7 @@ public class WebSocketPatientTokenManager : MonoBehaviour
     async void Start()
     {
         // Initialize the WebSocket connection.
-        arduinoWebSocket = new WebSocket("ws://192.168.0.2:3000");
+        arduinoWebSocket = new WebSocket(webSocketUrl);
 
         // WebSocket connection opened.
         arduinoWebSocket.OnOpen += () => Debug.Log("WebSocket connection opened!");

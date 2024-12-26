@@ -60,10 +60,13 @@ public class PalpationSequenceManager : MonoBehaviour
     /// </summary>
     public TextMeshProUGUI numberText;
 
+    [SerializeField]
+    private string webSocketUrl = "ws://192.168.0.139:3000";
+
     async void Start()
     {
         // Initialize the WebSocket connection to the Arduino.
-        arduinoWebSocket = new WebSocket("ws://192.168.0.2:3000");
+        arduinoWebSocket = new WebSocket(webSocketUrl);
 
         // WebSocket connection opened.
         arduinoWebSocket.OnOpen += () => Debug.Log("WebSocket connection opened!");
